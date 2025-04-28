@@ -18,3 +18,34 @@ model Post {
 
     @@index([name])
 }
+
+model User {
+    id        String    @id @default(cuid())
+    name      String
+    avatar    String
+    comments  Comment[] @relation("UserComments")
+    messages  Message[] @relation("UserMessages")
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}
+
+model Message {
+    id        Int       @id @default(autoincrement())
+    content   String
+    author    User      @relation("UserMessages", fields: [authorId], references: [id])
+    authorId  String
+    comments  Comment[] @relation("MessageComments")
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}
+
+model Comment {
+    id        Int      @id @default(autoincrement())
+    content   String
+    author    User     @relation("UserComments", fields: [authorId], references: [id])
+    authorId  String
+    message   Message  @relation("MessageComments", fields: [messageId], references: [id], onDelete: Cascade)
+    messageId Int
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
