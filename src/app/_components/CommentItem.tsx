@@ -4,7 +4,19 @@ import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { zhCN } from "date-fns/locale";
 import { api } from "~/trpc/react";
-import type { Comment } from "./MessageItem";
+
+// 定义 Comment 接口
+interface Comment {
+  id: number;
+  content: string;
+  authorId: string;
+  createdAt: Date;
+  author: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
+}
 
 interface CommentItemProps {
   comment: Comment;

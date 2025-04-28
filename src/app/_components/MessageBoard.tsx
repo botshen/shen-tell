@@ -8,7 +8,7 @@ import NavBar from "./NavBar";
 
 // 添加消息类型定义
 interface Message {
-  id: string;
+  id: number;
   content: string;
   authorId: string;
   createdAt: Date;
@@ -17,6 +17,17 @@ interface Message {
     name: string;
     avatar: string;
   };
+  comments: {
+    id: number;
+    content: string;
+    authorId: string;
+    createdAt: Date;
+    author: {
+      id: string;
+      name: string;
+      avatar: string;
+    };
+  }[];
 }
 
 // 用户类型定义
@@ -44,7 +55,9 @@ export default function MessageBoard() {
   useEffect(() => {
     if (usersList && usersList.length > 0) {
       setUsers(usersList);
-      setCurrentUser(usersList[0]);
+      if (usersList[0]) {
+        setCurrentUser(usersList[0]);
+      }
     } else if (usersList && usersList.length === 0) {
       // 如果没有用户，创建默认用户
       createDefaultUsers();
