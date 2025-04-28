@@ -143,17 +143,23 @@ const CommentList: FC<CommentListProps> = ({ comments, currentUserId, messageId 
                       />
 
                       {isCurrentUser && (
-                        <div className="mt-1 flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="mt-1 flex items-center gap-3">
                           <button
                             onClick={() => handleEditComment(comment)}
-                            className="text-xs text-gray-500 hover:text-gray-700"
+                            className="text-xs text-gray-500 hover:text-gray-700 flex items-center"
                           >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 mr-1">
+                              <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+                            </svg>
                             编辑
                           </button>
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
-                            className="text-xs text-red-500 hover:text-red-700"
+                            className="text-xs text-red-500 hover:text-red-700 flex items-center"
                           >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3 h-3 mr-1">
+                              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                            </svg>
                             删除
                           </button>
                         </div>
