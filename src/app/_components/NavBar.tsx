@@ -1,31 +1,48 @@
 "use client";
 
 import { type FC } from "react";
-import UserInfoBar from "./UserInfoBar";
+import Image from "next/image";
+
+interface User {
+  id: string;
+  name: string;
+  avatar: string;
+}
 
 interface NavBarProps {
-  user: {
-    id: string;
-    name: string;
-    avatar: string;
-  };
+  user: User;
   onSwitchUser: () => void;
 }
 
 const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
   return (
-    <nav className="bg-white shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          <div className="flex-shrink-0 flex items-center">
-            <h1 className="text-xl font-bold text-gray-800">沈的留言板</h1>
-          </div>
-          <div>
-            <UserInfoBar user={user} onSwitchUser={onSwitchUser} />
+    <header className="bg-white shadow-sm">
+      <div className="container max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+        <div className="text-xl font-bold">沈说</div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onSwitchUser}
+            className="text-sm text-gray-600 hover:text-gray-900"
+          >
+            切换用户
+          </button>
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm">{user.name}</span>
+            <div className="relative h-8 w-8 overflow-hidden rounded-full">
+              <Image
+                src={user.avatar}
+                alt={user.name}
+                fill
+                sizes="32px"
+                className="object-cover"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </nav>
+    </header>
   );
 };
 

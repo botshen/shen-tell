@@ -1,56 +1,69 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FC } from "react";
 import { api } from "~/trpc/react";
 
 interface CommentFormProps {
   messageId: number;
-  userId: string;
-  onSuccess?: () => void;
+  currentUserId: string;
 }
 
-export default function CommentForm({ messageId, userId, onSuccess }: CommentFormProps) {
+const CommentForm: FC<CommentFormProps> = ({ messageId, currentUserId }) => {
   const [content, setContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const utils = api.useUtils();
 
+  // 创建评论
   const createComment = api.comment.create.useMutation({
-    onSuccess: async () => {
+    onSuccess: () => {
       setContent("");
-      await utils.message.getAll.invalidate();
-      onSuccess?.();
+      setIsSubmitting(false);
+      void utils.message.getAll.invalidate();
+    },
+    onError: (error) => {
+      console.error("评论创建失败", error);
+      setIsSubmitting(false);
+      alert("评论发送失败，请稍后重试");
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (content.trim() === "") return;
 
+    if (!content.trim()) return;
+
+    setIsSubmitting(true);
     createComment.mutate({
       content,
-      authorId: userId,
       messageId,
+      authorId: currentUserId,
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full">
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="写下你的评论..."
-        className="w-full border border-gray-300 rounded-md p-2 mb-2 text-sm"
-        rows={2}
-      />
-      <div className="flex justify-end">
+    <form onSubmit={handleSubmit} className="mt-2">
+      <div className="flex items-end gap-2">
+        <div className="flex-1">
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="添加评论..."
+            className="w-full rounded-md border border-gray-300 p-2 text-sm"
+            rows={1}
+            disabled={isSubmitting}
+          />
+        </div>
         <button
           type="submit"
-          className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md"
-          disabled={createComment.isPending || content.trim() === ""}
+          disabled={!content.trim() || isSubmitting}
+          className="rounded-md bg-blue-500 px-3 py-1.5 text-xs text-white hover:bg-blue-600 disabled:opacity-50"
         >
-          {createComment.isPending ? "发布中..." : "发布评论"}
+          {isSubmitting ? "发送中..." : "发送"}
         </button>
       </div>
     </form>
   );
-} 
+};
+
+export default CommentForm; 
