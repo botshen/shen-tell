@@ -40,9 +40,9 @@ interface User {
 export default function MessageBoard() {
   const [users, setUsers] = useState<User[]>([]);
   const [currentUser, setCurrentUser] = useState<User>({
-    id: "user-1", // 默认用户，将从数据库中获取真实用户
-    name: "李华",
-    avatar: "/me.jpeg",
+    id: "user-2", // 默认用户，将从数据库中获取真实用户
+    name: "漫漫🐟",
+    avatar: "/you.jpeg",
   });
 
   // 获取用户列表
@@ -55,8 +55,8 @@ export default function MessageBoard() {
   useEffect(() => {
     if (usersList && usersList.length > 0) {
       setUsers(usersList);
-      if (usersList[0]) {
-        setCurrentUser(usersList[0]);
+      if (usersList[1]) {
+        setCurrentUser(usersList[1]);
       }
     } else if (usersList && usersList.length === 0) {
       // 如果没有用户，创建默认用户
@@ -106,7 +106,6 @@ export default function MessageBoard() {
       <NavBar user={currentUser} onSwitchUser={handleSwitchUser} />
 
       <div className="flex-1 w-full max-w-2xl mx-auto py-8 px-4">
-        <h1 className="text-2xl font-bold mb-6 text-center">留言列表</h1>
 
         {/* 添加新留言的表单 */}
         <div className="mb-8">
