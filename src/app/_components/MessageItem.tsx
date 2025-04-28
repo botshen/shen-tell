@@ -6,6 +6,9 @@ import { api } from "~/trpc/react";
 import { formatEmoji } from "~/utils/formatEmoji";
 import dynamic from "next/dynamic";
 
+// 引入图标
+import { FaEdit, FaTrash, FaComment, FaCommentSlash } from 'react-icons/fa';
+
 const CommentList = dynamic(() => import("./CommentList"), { ssr: false });
 const CommentForm = dynamic(() => import("./CommentForm"), { ssr: false });
 
@@ -126,13 +129,13 @@ const MessageItem: FC<MessageItemProps> = ({ message, currentUserId }) => {
                 <div className="flex justify-end space-x-2">
                   <button
                     onClick={handleCancelEdit}
-                    className="rounded px-2 py-1 text-xs text-gray-600 hover:bg-gray-100"
+                    className="rounded px-3 py-1.5 text-xs text-gray-600 bg-gray-50 active:bg-gray-200 focus:bg-gray-200 transition-colors"
                   >
                     取消
                   </button>
                   <button
                     onClick={handleUpdate}
-                    className="rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
+                    className="rounded bg-blue-500 px-3 py-1.5 text-xs text-white active:bg-blue-700 focus:bg-blue-600 transition-colors"
                   >
                     保存
                   </button>
@@ -151,24 +154,27 @@ const MessageItem: FC<MessageItemProps> = ({ message, currentUserId }) => {
                 <div className="mt-2 flex items-center gap-4">
                   <button
                     onClick={() => setShowComments(!showComments)}
-                    className="text-xs text-gray-500 hover:text-gray-700"
+                    className="flex items-center gap-1 rounded-full px-3 py-1.5 text-xs text-gray-500 bg-gray-50 active:bg-gray-200 focus:bg-gray-200 transition-colors"
                   >
-                    {showComments ? "隐藏评论" : `${message.comments.length > 0 ? `${message.comments.length} 条` : ""}评论`}
+                    {showComments ?
+                      <><FaCommentSlash className="text-gray-500" /> 隐藏评论</> :
+                      <><FaComment className="text-gray-500" /> {message.comments.length > 0 ? `${message.comments.length} 条` : ""}评论</>
+                    }
                   </button>
 
                   {isCurrentUser && (
                     <>
                       <button
                         onClick={() => setIsEditing(true)}
-                        className="text-xs text-gray-500 hover:text-gray-700"
+                        className="flex items-center gap-1 rounded-full px-3 py-1.5 text-xs text-gray-500 bg-gray-50 active:bg-gray-200 focus:bg-gray-200 transition-colors"
                       >
-                        编辑
+                        <FaEdit className="text-gray-500" /> 编辑
                       </button>
                       <button
                         onClick={handleDelete}
-                        className="text-xs text-red-500 hover:text-red-700"
+                        className="flex items-center gap-1 rounded-full px-3 py-1.5 text-xs text-red-500 bg-red-50 active:bg-red-200 focus:bg-red-100 transition-colors"
                       >
-                        删除
+                        <FaTrash className="text-red-500" /> 删除
                       </button>
                     </>
                   )}
