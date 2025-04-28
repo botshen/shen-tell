@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
-
 import type { Metadata } from "next";
 import { TRPCReactProvider } from "~/trpc/react";
+import ClientSnowEffectWrapper from "./_components/ClientSnowEffectWrapper";
 
 export const metadata: Metadata = {
 	title: "沈的留言板",
@@ -15,7 +15,10 @@ export default function RootLayout({
 	return (
 		<html lang="zh">
 			<body className="bg-gray-50 min-h-screen">
-				<TRPCReactProvider>{children}</TRPCReactProvider>
+				<TRPCReactProvider>
+					{children}
+					<ClientSnowEffectWrapper />
+				</TRPCReactProvider>
 			</body>
 		</html>
 	);
