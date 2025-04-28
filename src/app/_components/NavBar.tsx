@@ -9,9 +9,10 @@ interface NavBarProps {
     name: string;
     avatar: string;
   };
+  onSwitchUser: () => void;
 }
 
-const NavBar: FC<NavBarProps> = ({ user }) => {
+const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
   return (
     <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -20,7 +21,7 @@ const NavBar: FC<NavBarProps> = ({ user }) => {
             <h1 className="text-xl font-bold text-gray-800">沈的留言板</h1>
           </div>
           <div>
-            <UserInfoBar user={user} />
+            <UserInfoBar user={user} onSwitchUser={onSwitchUser} />
           </div>
         </div>
       </div>

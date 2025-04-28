@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { api } from "~/trpc/react";
 import MessageItem from "./MessageItem";
 import NewMessageForm from "./NewMessageForm";
@@ -19,16 +19,69 @@ interface Message {
   };
 }
 
+// 用户类型定义
+interface User {
+  id: string;
+  name: string;
+  avatar: string;
+}
+
 export default function MessageBoard() {
-  const [currentUser, setCurrentUser] = useState<{
-    id: string;
-    name: string;
-    avatar: string;
-  }>({
-    id: "user-1", // 假设的固定ID，实际应用中应该使用真实的用户认证
+  const [users, setUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<User>({
+    id: "user-1", // 默认用户，将从数据库中获取真实用户
     name: "李华",
     avatar: "/me.jpeg",
   });
+
+  // 获取用户列表
+  const { data: usersList } = api.user.getAll.useQuery();
+
+  // 创建用户的 mutation
+  const createUser = api.user.create.useMutation();
+
+  // 当用户列表加载完成时，设置当前用户
+  useEffect(() => {
+    if (usersList && usersList.length > 0) {
+      setUsers(usersList);
+      setCurrentUser(usersList[0]);
+    } else if (usersList && usersList.length === 0) {
+      // 如果没有用户，创建默认用户
+      createDefaultUsers();
+    }
+  }, [usersList]);
+
+  // 如果没有用户，创建默认用户
+  const createDefaultUsers = async () => {
+    if (users.length === 0) {
+      try {
+        const user1 = await createUser.mutateAsync({
+          name: "李华",
+          avatar: "/me.jpeg"
+        });
+        setUsers(prev => [...prev, user1]);
+        setCurrentUser(user1);
+
+        const user2 = await createUser.mutateAsync({
+          name: "沈",
+          avatar: "/you.jpeg"
+        });
+        setUsers(prev => [...prev, user1, user2]);
+      } catch (error) {
+        console.error("创建默认用户失败", error);
+      }
+    }
+  };
+
+  // 切换用户
+  const handleSwitchUser = () => {
+    if (users.length < 2) return;
+
+    const nextUser = users.find(user => user.id !== currentUser.id);
+    if (nextUser) {
+      setCurrentUser(nextUser);
+    }
+  };
 
   // 使用tRPC钩子获取所有留言
   const { data: messages, isLoading } = api.message.getAll.useQuery(undefined, {
@@ -37,7 +90,7 @@ export default function MessageBoard() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <NavBar user={currentUser} />
+      <NavBar user={currentUser} onSwitchUser={handleSwitchUser} />
 
       <div className="flex-1 w-full max-w-2xl mx-auto py-8 px-4">
         <h1 className="text-2xl font-bold mb-6 text-center">留言列表</h1>
