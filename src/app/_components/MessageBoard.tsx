@@ -4,6 +4,20 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 import MessageItem from "./MessageItem";
 import NewMessageForm from "./NewMessageForm";
+import NavBar from "./NavBar";
+
+// 添加消息类型定义
+interface Message {
+  id: string;
+  content: string;
+  authorId: string;
+  createdAt: Date;
+  author: {
+    id: string;
+    name: string;
+    avatar: string;
+  };
+}
 
 export default function MessageBoard() {
   const [currentUser, setCurrentUser] = useState<{
@@ -22,29 +36,33 @@ export default function MessageBoard() {
   });
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center">留言板</h1>
+    <div className="flex flex-col min-h-screen">
+      <NavBar user={currentUser} />
 
-      {/* 添加新留言的表单 */}
-      <div className="mb-8">
-        <NewMessageForm userId={currentUser.id} />
-      </div>
+      <div className="flex-1 w-full max-w-2xl mx-auto py-8 px-4">
+        <h1 className="text-2xl font-bold mb-6 text-center">留言列表</h1>
 
-      {/* 留言列表 */}
-      <div className="space-y-6">
-        {isLoading ? (
-          <div className="text-center py-4">加载中...</div>
-        ) : messages && messages.length > 0 ? (
-          messages.map((message) => (
-            <MessageItem
-              key={message.id}
-              message={message}
-              currentUserId={currentUser.id}
-            />
-          ))
-        ) : (
-          <div className="text-center py-4 text-gray-500">暂无留言</div>
-        )}
+        {/* 添加新留言的表单 */}
+        <div className="mb-8">
+          <NewMessageForm userId={currentUser.id} />
+        </div>
+
+        {/* 留言列表 */}
+        <div className="space-y-6">
+          {isLoading ? (
+            <div className="text-center py-4">加载中...</div>
+          ) : messages && messages.length > 0 ? (
+            messages.map((message: Message) => (
+              <MessageItem
+                key={message.id}
+                message={message}
+                currentUserId={currentUser.id}
+              />
+            ))
+          ) : (
+            <div className="text-center py-4 text-gray-500">暂无留言</div>
+          )}
+        </div>
       </div>
     </div>
   );
