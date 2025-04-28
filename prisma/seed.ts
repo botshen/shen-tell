@@ -299,8 +299,213 @@ async function main() {
       createdAt: 1445863097000,
       comments: []
     },
-    // 这里省略了一些数据，完整版太长了
-    // 其余数据会在实际应用中添加
+    {
+      id: 25703,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "曾经有一件棘手的事情放在我面前，我没有珍惜，等我失去的时候我才后悔莫及，人世间最痛苦的事莫过于此。如果上天能够给我一个再来一次的机会，我会对那个你说出三个字：\"还钱啦\"。如果非要在这笔账上加上一个期限，我希望是……一天内还清！",
+      createdAt: 1444940072000,
+      comments: [
+        {
+          id: 110848,
+          author: {
+            name: "李华",
+            avatar: "/me.jpeg"
+          },
+          content: "[em]e328531[/em]",
+          createdAt: 1444940397000
+        }
+      ]
+    },
+    {
+      id: 443265,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "哈哈  中秋快乐[em]e113[/em][em]e113[/em][em]e113[/em]",
+      createdAt: 1443341322000,
+      comments: [
+        {
+          id: 566604,
+          author: {
+            name: "李华",
+            avatar: "/me.jpeg"
+          },
+          content: "[em]e328513[/em][em]e328513[/em][em]e328513[/em]你也是",
+          createdAt: 1443341743000
+        }
+      ]
+    },
+    {
+      id: 664615,
+      author: {
+        name: "李华",
+        avatar: "/me.jpeg"
+      },
+      content: "2015年就要到了。曾经拥有的不要忘记，属于自己的不要放弃，辛劳得来的更要珍惜，已经失去的当作回忆，跨年快乐，愿你在2015年一切都能顺顺利利，高考一起加油！",
+      createdAt: 1420066898000,
+      comments: [
+        {
+          id: 859208,
+          author: {
+            name: "漫漫🐟",
+            avatar: "/you.jpeg"
+          },
+          content: "2015,将会是崭新的开始的,一起为高考努力吧.",
+          createdAt: 1420074377000
+        }
+      ]
+    },
+    {
+      id: 562365,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "小鑫子   好好学习吧",
+      createdAt: 1410207137000,
+      comments: []
+    },
+    {
+      id: 120953,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "这里还有我去年给你发的 中秋快乐呢",
+      createdAt: 1410207096000,
+      comments: []
+    },
+    {
+      id: 579426,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "月饼节快乐哈  ",
+      createdAt: 1410206995000,
+      comments: []
+    },
+    {
+      id: 125553,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "中秋快乐",
+      createdAt: 1379593362000,
+      comments: []
+    },
+    {
+      id: 304374,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "帮你踩踩.还有,踩扁你",
+      createdAt: 1374163301000,
+      comments: []
+    },
+    {
+      id: 518826,
+      author: {
+        name: "李华",
+        avatar: "/me.jpeg"
+      },
+      content: "嘿嘿",
+      createdAt: 1364066382000,
+      comments: []
+    },
+    {
+      id: 618360,
+      author: {
+        name: "李华",
+        avatar: "/me.jpeg"
+      },
+      content: "呵呵",
+      createdAt: 1364062147000,
+      comments: [
+        {
+          id: 816411,
+          author: {
+            name: "漫漫🐟",
+            avatar: "/you.jpeg"
+          },
+          content: "敢不留呵呵吗",
+          createdAt: 1364062620000
+        }
+      ]
+    },
+    {
+      id: 536407,
+      author: {
+        name: "李华",
+        avatar: "/me.jpeg"
+      },
+      content: "\\n oooO ↘┏━┓ ↙ Oooo \\n ( 踩)→┃你┃ ←(死 ) \\n  \\ ( →┃√┃ ← ) / \\n　 \\_)↗┗━┛ ↖(_/",
+      createdAt: 1363987182000,
+      comments: []
+    },
+    {
+      id: 513009,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "踩踩,我够意思吧",
+      createdAt: 1363946699000,
+      comments: [
+        {
+          id: 881089,
+          author: {
+            name: "漫漫🐟",
+            avatar: "/you.jpeg"
+          },
+          content: "傻样",
+          createdAt: 1363953017000
+        },
+        {
+          id: 774663,
+          author: {
+            name: "李华",
+            avatar: "/me.jpeg"
+          },
+          content: "哈哈哈啊[em]e4018[/em] ",
+          createdAt: 1363947414000
+        },
+        {
+          id: 496114,
+          author: {
+            name: "漫漫🐟",
+            avatar: "/you.jpeg"
+          },
+          content: "嘿嘿",
+          createdAt: 1363947354000
+        },
+        {
+          id: 134145,
+          author: {
+            name: "李华",
+            avatar: "/me.jpeg"
+          },
+          content: "够\n[em]e4005[/em]\n",
+          createdAt: 1363947201000
+        }
+      ]
+    },
+    {
+      id: 270560,
+      author: {
+        name: "漫漫🐟",
+        avatar: "/you.jpeg"
+      },
+      content: "              好好活着吧",
+      createdAt: 1360159870000,
+      comments: []
+    }
   ];
 
   // 创建所有留言和评论
