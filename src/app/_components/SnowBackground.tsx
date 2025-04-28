@@ -109,11 +109,16 @@ const SnowBackground: React.FC<SnowBackgroundProps> = ({
       // 默认白色
       const defaultColor: RGB = { r: 255, g: 255, b: 255 };
 
+      // 确保输入是有效字符串
+      if (!inputColor || typeof inputColor !== 'string') {
+        return defaultColor;
+      }
+
       try {
         // 处理16进制颜色
         if (inputColor.startsWith('#')) {
           const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(inputColor);
-          if (result && result.length >= 4) {
+          if (result && result.length >= 4 && result[1] && result[2] && result[3]) {
             return {
               r: parseInt(result[1], 16),
               g: parseInt(result[2], 16),
@@ -124,7 +129,7 @@ const SnowBackground: React.FC<SnowBackgroundProps> = ({
 
         // 处理RGB颜色
         const rgbMatch = inputColor.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
-        if (rgbMatch && rgbMatch.length >= 4) {
+        if (rgbMatch && rgbMatch.length >= 4 && rgbMatch[1] && rgbMatch[2] && rgbMatch[3]) {
           return {
             r: parseInt(rgbMatch[1], 10),
             g: parseInt(rgbMatch[2], 10),
@@ -139,7 +144,7 @@ const SnowBackground: React.FC<SnowBackgroundProps> = ({
     };
 
     // 获取基础颜色
-    const snowColor = color || DEFAULT_COLOR;
+    const snowColor = typeof color === 'string' ? color : DEFAULT_COLOR;
     const baseColor = parseColor(snowColor);
 
     // 绘制雪花
