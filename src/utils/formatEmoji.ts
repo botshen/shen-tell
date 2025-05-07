@@ -53,7 +53,7 @@ export function formatEmoji(content: string): string {
 
   // 去除前后空格
   const trimmedContent = content.trim();
-  console.log('content', trimmedContent);
+  // console.log('content', trimmedContent);
 
   // 替换 [em]eXXX[/em] 为 HTML 表情图片
   return trimmedContent.replace(/\[em\]e(\d+)\[\/em\]/g, (_, code) => {

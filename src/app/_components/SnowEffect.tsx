@@ -22,9 +22,8 @@ const SnowEffect: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    console.log("SnowEffect component mounted");
     setIsLoaded(true);
-    return () => console.log("SnowEffect component unmounted");
+    return () => { };
   }, []);
 
   const resetToDefaults = () => {
