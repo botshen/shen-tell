@@ -75,6 +75,28 @@ export function getSolarBirthdays(
 }
 
 /**
+ * 格式化农历日期为中文表示
+ * @param month 农历月份
+ * @param day 农历日期
+ * @returns 农历日期的中文表示，如"正月初一"或"十月三十"
+ */
+export function formatLunarDate(month: number, day: number): string {
+  const chineseMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'];
+  const chineseDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+    '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+    '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十', '三十一'];
+
+  if (month < 1 || month > 12 || day < 1 || day > 31) {
+    return '无效日期';
+  }
+
+  const monthStr = chineseMonths[month - 1] + '月';
+  const dayStr = chineseDays[day - 1];
+
+  return monthStr + dayStr;
+}
+
+/**
  * 计算距离最近的生日还有多少天
  * @param lunarMonth 农历月份
  * @param lunarDay 农历日期
@@ -138,10 +160,12 @@ export function getNextBirthday(lunarMonth: number, lunarDay: number): { days: n
 export function test() {
   // 使用示例
   console.log('测试李华的生日（农历10月30日）:');
+  console.log('农历日期:', formatLunarDate(10, 30));
   const lihua = getNextBirthday(10, 30);
   console.log('李华的下一个生日:', lihua);
 
   console.log('\n测试漫漫🐟的生日（农历5月13日）:');
+  console.log('农历日期:', formatLunarDate(5, 13));
   const manman = getNextBirthday(5, 13);
   console.log('漫漫🐟的下一个生日:', manman);
 }
