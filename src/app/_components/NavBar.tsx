@@ -3,6 +3,13 @@
 import { type FC, useEffect, useState } from "react";
 import Image from "next/image";
 import { getNextBirthday } from "~/utils/birth";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+
+// 配置 dayjs 使用时区插件
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 interface User {
   id: string;
@@ -29,13 +36,14 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
 
   // 计算倒计时
   const calculateTimeLeft = (targetDate: string) => {
-    const now = new Date();
-    const target = new Date(targetDate);
-    const difference = target.getTime() - now.getTime();
+    const now = dayjs().tz("Asia/Shanghai");
+    const target = dayjs(targetDate).tz("Asia/Shanghai");
+    const difference = target.diff(now);
 
     console.log('倒计时计算:', {
       目标日期: targetDate,
-      当前时间: now.toLocaleString(),
+      当前时间: now.format('YYYY-MM-DD HH:mm:ss'),
+      目标时间: target.format('YYYY-MM-DD HH:mm:ss'),
       时间差_毫秒: difference
     });
 
