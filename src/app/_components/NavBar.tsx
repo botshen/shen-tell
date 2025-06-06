@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/navigation";
+import CountdownCard from "./CountdownCard";
 
 // 配置 dayjs 使用时区插件
 dayjs.extend(utc);
@@ -140,23 +141,24 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
           {countdown.days > 0 && (
-            <div className="flex flex-col sm:flex-row items-center gap-2">
-              {/* 倒计时显示 */}
-              <div className={`${theme.lightColor} ${theme.borderColor} border rounded-lg px-4 py-2 text-sm`}>
-                <div className={`${theme.textColor} font-medium`}>
-                  距离{user.name}的生日还有
-                </div>
-                <div className="font-mono font-bold text-lg text-gray-800 mt-1">
-                  {countdown.days}天 {String(countdown.hours).padStart(2, '0')}:
-                  {String(countdown.minutes).padStart(2, '0')}:
-                  {String(countdown.seconds).padStart(2, '0')}
-                </div>
+            <div className="flex flex-col items-center gap-3 bg-white rounded-xl p-3 shadow-sm">
+              {/* 倒计时标题 */}
+              <div className={`${theme.textColor} text-sm font-medium`}>
+                距离{user.name}的生日还有
               </div>
 
-              {/* 查看生日按钮 */}
+              {/* 倒计时卡片组 */}
+              <div className="flex gap-2 items-center">
+                <CountdownCard value={countdown.days} label="天" color={theme.color} />
+                <CountdownCard value={countdown.hours} label="时" color={theme.color} />
+                <CountdownCard value={countdown.minutes} label="分" color={theme.color} />
+                <CountdownCard value={countdown.seconds} label="秒" color={theme.color} />
+              </div>
+
+              {/* 查看更多按钮 */}
               <button
                 onClick={() => router.push(`/birthdays/${user.name}`)}
-                className={`${theme.color} ${theme.hoverColor} text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all text-sm whitespace-nowrap`}
+                className={`${theme.color} ${theme.hoverColor} text-white px-4 py-1.5 rounded-lg text-sm whitespace-nowrap hover:shadow-md transition-all`}
               >
                 查看更多生日
               </button>
