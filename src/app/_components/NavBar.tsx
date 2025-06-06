@@ -6,6 +6,7 @@ import { getNextBirthday } from "~/utils/birth";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { useRouter } from "next/navigation";
 
 // 配置 dayjs 使用时区插件
 dayjs.extend(utc);
@@ -30,9 +31,9 @@ interface CountdownTime {
 }
 
 const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
+  const router = useRouter();
   const [nextBirthday, setNextBirthday] = useState<{ days: number; date: string }>({ days: 0, date: '' });
   const [countdown, setCountdown] = useState<CountdownTime>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const [showBirthdayModal, setShowBirthdayModal] = useState(false);
 
   // 计算倒计时
   const calculateTimeLeft = (targetDate: string) => {
@@ -109,22 +110,28 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
     };
   }, [nextBirthday.date]);
 
-  // 获取用户对应的生日图标和颜色
+  // 获取用户对应的生日主题
   const getBirthdayTheme = () => {
     if (user.name === "李华") {
       return {
-        icon: "🎂",
-        color: "bg-gradient-to-r from-blue-400 to-purple-500"
+        color: "bg-gradient-to-r from-blue-400 to-purple-500",
+        hoverColor: "hover:from-blue-500 hover:to-purple-600",
+        lightColor: "bg-blue-50",
+        borderColor: "border-blue-200",
+        textColor: "text-blue-600"
       };
     } else {
       return {
-        icon: "🐟",
-        color: "bg-gradient-to-r from-pink-400 to-orange-400"
+        color: "bg-gradient-to-r from-pink-400 to-orange-400",
+        hoverColor: "hover:from-pink-500 hover:to-orange-500",
+        lightColor: "bg-pink-50",
+        borderColor: "border-pink-200",
+        textColor: "text-pink-600"
       };
     }
   };
 
-  const { icon, color } = getBirthdayTheme();
+  const theme = getBirthdayTheme();
 
   return (
     <header className="bg-white shadow-sm">
@@ -133,79 +140,52 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
           {countdown.days > 0 && (
-            <div
-              className={`rounded-full px-4 py-2 text-white text-sm shadow-md ${color} relative overflow-hidden transition-all duration-300 hover:shadow-lg cursor-pointer max-w-full sm:max-w-xs truncate`}
-              onClick={() => setShowBirthdayModal(true)}
-            >
-              <div className="flex items-center gap-2">
-                <span className="text-lg animate-bounce">{icon}</span>
-                <div>
-                  <span className="mr-1">距离{user.name}的生日还有:</span>
-                  <span className="font-mono font-semibold">
-                    {countdown.days}天 {String(countdown.hours).padStart(2, '0')}:
-                    {String(countdown.minutes).padStart(2, '0')}:
-                    {String(countdown.seconds).padStart(2, '0')}
-                  </span>
+            <div className="flex flex-col sm:flex-row items-center gap-2">
+              {/* 倒计时显示 */}
+              <div className={`${theme.lightColor} ${theme.borderColor} border rounded-lg px-4 py-2 text-sm`}>
+                <div className={`${theme.textColor} font-medium`}>
+                  距离{user.name}的生日还有
                 </div>
-                <span className="text-xs opacity-70">查看全部</span>
+                <div className="font-mono font-bold text-lg text-gray-800 mt-1">
+                  {countdown.days}天 {String(countdown.hours).padStart(2, '0')}:
+                  {String(countdown.minutes).padStart(2, '0')}:
+                  {String(countdown.seconds).padStart(2, '0')}
+                </div>
               </div>
-              <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 animate-pulse"
-                style={{ animationDuration: '3s' }}></div>
+
+              {/* 查看生日按钮 */}
+              <button
+                onClick={() => router.push(`/birthdays/${user.name}`)}
+                className={`${theme.color} ${theme.hoverColor} text-white px-4 py-2 rounded-lg shadow-md hover:shadow-lg transition-all text-sm whitespace-nowrap`}
+              >
+                查看更多生日
+              </button>
             </div>
           )}
-          <button
-            onClick={onSwitchUser}
-            className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1 rounded-md hover:bg-gray-100 transition-colors"
-          >
-            切换用户
-          </button>
 
-          <div className="flex items-center gap-2">
-            <span className="text-sm">{user.name}</span>
-            <div className="relative h-8 w-8 overflow-hidden rounded-full border-2 border-gray-200">
-              <Image
-                src={user.avatar}
-                alt={user.name}
-                fill
-                sizes="32px"
-                className="object-cover"
-              />
+          <div className="flex items-center gap-3">
+            <button
+              onClick={onSwitchUser}
+              className="text-sm text-gray-600 hover:text-gray-900 px-3 py-1 rounded-md hover:bg-gray-100 transition-colors"
+            >
+              切换用户
+            </button>
+
+            <div className="flex items-center gap-2">
+              <span className="text-sm">{user.name}</span>
+              <div className="relative h-8 w-8 overflow-hidden rounded-full border-2 border-gray-200">
+                <Image
+                  src={user.avatar}
+                  alt={user.name}
+                  fill
+                  sizes="32px"
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* 生日日期列表弹窗 */}
-      {showBirthdayModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center p-4"
-          onClick={() => setShowBirthdayModal(false)}>
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-hidden"
-            onClick={e => e.stopPropagation()}>
-            <div className={`${color} p-4 text-white flex justify-between items-center`}>
-              <h3 className="text-lg font-bold flex items-center gap-2">
-                {icon} {user.name}的生日日期
-              </h3>
-              <button onClick={() => setShowBirthdayModal(false)}
-                className="text-white hover:text-gray-200">
-                ✕
-              </button>
-            </div>
-            <div className="p-4 overflow-y-auto max-h-[calc(80vh-4rem)]">
-              <p className="text-center mb-4 text-gray-600">
-                农历生日将在每年的不同日期，点击下方查看全部公历日期
-              </p>
-              <div className="flex justify-center">
-                <button
-                  className={`${color} text-white py-2 px-4 rounded-full shadow-md hover:shadow-lg transition-all`}
-                  onClick={() => window.location.href = `/birthdays/${user.name}`}
-                >
-                  查看全部生日日期
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </header>
   );
 };
