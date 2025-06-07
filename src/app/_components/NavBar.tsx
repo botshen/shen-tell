@@ -98,11 +98,16 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
 
     console.log('开始倒计时，目标日期:', nextBirthday.date);
 
-    // 检查是否是生日当天
+    // 检查是否是当前用户的生日当天
     const now = dayjs().tz("Asia/Shanghai");
     const target = dayjs(nextBirthday.date).tz("Asia/Shanghai");
     const isSameDay = now.format('YYYY-MM-DD') === target.format('YYYY-MM-DD');
-    setIsBirthday(isSameDay);
+
+    // 只有当前用户过生日时才设置为true
+    setIsBirthday(isSameDay && (
+      (user.name === "李华" && now.month() === target.month() && now.date() === target.date()) ||
+      (user.name === "漫漫🐟" && now.month() === target.month() && now.date() === target.date())
+    ));
 
     // 如果不是生日当天，才启动倒计时
     if (!isSameDay) {
@@ -119,7 +124,7 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
         clearInterval(timer);
       };
     }
-  }, [nextBirthday.date]);
+  }, [nextBirthday.date, user.name]);
 
   // 获取用户对应的生日主题
   const getBirthdayTheme = () => {
