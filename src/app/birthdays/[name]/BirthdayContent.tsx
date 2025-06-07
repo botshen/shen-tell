@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getSolarBirthdays, formatLunarDate } from '~/utils/birth';
 import dayjs from 'dayjs';
+import { userBirthdays } from "~/config/birthdays";
 
 type BirthdayContentProps = {
   name: string;
@@ -22,16 +23,19 @@ export function BirthdayContent({ name }: BirthdayContentProps) {
 
   // 获取用户生日信息
   useEffect(() => {
-    // 根据用户名设置生日
-    const lunarMonth = userName === "李华" ? 10 : 5;
-    const lunarDay = userName === "李华" ? 30 : 13;
+    const userConfig = userBirthdays[userName];
+    if (!userConfig) {
+      console.error('未找到用户生日配置:', userName);
+      setLoading(false);
+      return;
+    }
 
     // 设置格式化后的农历日期
-    setLunarDate(formatLunarDate(lunarMonth, lunarDay));
+    setLunarDate(formatLunarDate(userConfig.lunarMonth, userConfig.lunarDay));
 
     // 获取从当前年份到2100年的所有生日日期
     const currentYear = new Date().getFullYear();
-    const birthdays = getSolarBirthdays(lunarMonth, lunarDay, currentYear, 2100);
+    const birthdays = getSolarBirthdays(userConfig.lunarMonth, userConfig.lunarDay, currentYear, 2100);
 
     // 按年份分组
     const grouped: Record<string, string[]> = {};
@@ -56,21 +60,13 @@ export function BirthdayContent({ name }: BirthdayContentProps) {
 
   // 获取用户主题
   const getTheme = () => {
-    if (userName === "李华") {
-      return {
-        icon: "🎂",
-        color: "bg-gradient-to-r from-blue-400 to-purple-500",
-        lightColor: "bg-blue-100",
-        textColor: "text-blue-600"
-      };
-    } else {
-      return {
-        icon: "🐟",
-        color: "bg-gradient-to-r from-pink-400 to-orange-400",
-        lightColor: "bg-pink-100",
-        textColor: "text-pink-600"
-      };
-    }
+    const userConfig = userBirthdays[userName];
+    return userConfig?.theme || {
+      icon: "🎉",
+      color: "bg-gradient-to-r from-gray-400 to-gray-500",
+      lightColor: "bg-gray-100",
+      textColor: "text-gray-600"
+    };
   };
 
   const theme = getTheme();

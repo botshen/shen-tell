@@ -8,6 +8,7 @@ import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/navigation";
 import CountdownCard from "./CountdownCard";
+import { userBirthdays } from "~/config/birthdays";
 
 // 配置 dayjs 使用时区插件
 dayjs.extend(utc);
@@ -66,23 +67,16 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
   };
 
   useEffect(() => {
-    // 根据用户名设置生日
-    const lunarMonth = user.name === "李华" ? 10 : 5;
-    const lunarDay = user.name === "李华" ? 30 : 13;
+    const userConfig = userBirthdays[user.name];
+    if (!userConfig) {
+      console.error('未找到用户生日配置:', user.name);
+      return;
+    }
 
-    // 测试两个用户的生日
-    console.log('\n测试李华的生日（农历10月30日）:');
-    const lihua = getNextBirthday(10, 30);
-    console.log('李华的下一个生日:', lihua);
-
-    console.log('\n测试漫漫🐟的生日（农历5月13日）:');
-    const manman = getNextBirthday(5, 13);
-    console.log('漫漫🐟的下一个生日:', manman);
-
-    const birthday = getNextBirthday(lunarMonth, lunarDay);
+    const birthday = getNextBirthday(userConfig.lunarMonth, userConfig.lunarDay);
     console.log('获取到生日信息:', {
       用户: user.name,
-      农历: `${lunarMonth}月${lunarDay}日`,
+      农历: `${userConfig.lunarMonth}月${userConfig.lunarDay}日`,
       公历: birthday.date,
       距离天数: birthday.days
     });
@@ -128,23 +122,15 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
 
   // 获取用户对应的生日主题
   const getBirthdayTheme = () => {
-    if (user.name === "李华") {
-      return {
-        color: "bg-gradient-to-r from-blue-400 to-purple-500",
-        hoverColor: "hover:from-blue-500 hover:to-purple-600",
-        lightColor: "bg-blue-50",
-        borderColor: "border-blue-200",
-        textColor: "text-blue-600"
-      };
-    } else {
-      return {
-        color: "bg-gradient-to-r from-pink-400 to-orange-400",
-        hoverColor: "hover:from-pink-500 hover:to-orange-500",
-        lightColor: "bg-pink-50",
-        borderColor: "border-pink-200",
-        textColor: "text-pink-600"
-      };
-    }
+    const userConfig = userBirthdays[user.name];
+    return userConfig?.theme || {
+      color: "bg-gradient-to-r from-gray-400 to-gray-500",
+      hoverColor: "hover:from-gray-500 hover:to-gray-600",
+      lightColor: "bg-gray-50",
+      borderColor: "border-gray-200",
+      textColor: "text-gray-600",
+      icon: "🎉"
+    };
   };
 
   const theme = getBirthdayTheme();
