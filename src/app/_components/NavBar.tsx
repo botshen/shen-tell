@@ -35,6 +35,7 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
   const router = useRouter();
   const [nextBirthday, setNextBirthday] = useState<{ days: number; date: string }>({ days: 0, date: '' });
   const [countdown, setCountdown] = useState<CountdownTime>({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+  const [isBirthday, setIsBirthday] = useState(false);
 
   // 计算倒计时
   const calculateTimeLeft = (targetDate: string) => {
@@ -97,18 +98,27 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
 
     console.log('开始倒计时，目标日期:', nextBirthday.date);
 
-    // 初始化倒计时
-    setCountdown(calculateTimeLeft(nextBirthday.date));
+    // 检查是否是生日当天
+    const now = dayjs().tz("Asia/Shanghai");
+    const target = dayjs(nextBirthday.date).tz("Asia/Shanghai");
+    const isSameDay = now.format('YYYY-MM-DD') === target.format('YYYY-MM-DD');
+    setIsBirthday(isSameDay);
 
-    // 每秒更新倒计时
-    const timer = setInterval(() => {
+    // 如果不是生日当天，才启动倒计时
+    if (!isSameDay) {
+      // 初始化倒计时
       setCountdown(calculateTimeLeft(nextBirthday.date));
-    }, 1000);
 
-    return () => {
-      console.log('清理倒计时定时器');
-      clearInterval(timer);
-    };
+      // 每秒更新倒计时
+      const timer = setInterval(() => {
+        setCountdown(calculateTimeLeft(nextBirthday.date));
+      }, 1000);
+
+      return () => {
+        console.log('清理倒计时定时器');
+        clearInterval(timer);
+      };
+    }
   }, [nextBirthday.date]);
 
   // 获取用户对应的生日主题
@@ -140,7 +150,21 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
         <div className="text-xl font-bold mb-2 sm:mb-0">QQ 留言板</div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
-          {(countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0 || countdown.seconds > 0) && (
+          {isBirthday ? (
+            <div className="flex flex-col items-center gap-3 bg-white rounded-xl p-3 shadow-sm">
+              <div className={`${theme.textColor} text-lg font-bold`}>
+                🎉 祝{user.name}生日快乐 🎉
+              </div>
+              <div className="w-48 h-48 relative">
+                <Image
+                  src="/giphy.gif"
+                  alt="生日快乐"
+                  fill
+                  className="object-cover rounded-lg"
+                />
+              </div>
+            </div>
+          ) : (countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0 || countdown.seconds > 0) && (
             <div className="flex flex-col items-center gap-3 bg-white rounded-xl p-3 shadow-sm">
               {/* 倒计时标题 */}
               <div className={`${theme.textColor} text-sm font-medium`}>
