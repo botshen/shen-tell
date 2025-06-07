@@ -147,7 +147,7 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
               </div>
               <div className="w-48 h-48 relative">
                 <Image
-                  src="/giphy.gif"
+                  src="https://tc.z.wiki/autoupload/IE2OGBiZoh-c-aA5FsyWtFQXuRE9k8EpQP2a9TSHWqKyl5f0KlZfm6UsKj-HyTuv/20250607/UMzF/480X480/giphy.gif"
                   alt="生日快乐"
                   fill
                   className="object-cover rounded-lg"
