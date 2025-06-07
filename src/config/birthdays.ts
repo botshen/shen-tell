@@ -30,7 +30,7 @@ export const userBirthdays: UserBirthdays = {
   },
   "漫漫🐟": {
     lunarMonth: 5,
-    lunarDay: 12,
+    lunarDay: 13,
     theme: {
       color: "bg-gradient-to-r from-pink-400 to-orange-400",
       hoverColor: "hover:from-pink-500 hover:to-orange-500",
