@@ -140,7 +140,7 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
         <div className="text-xl font-bold mb-2 sm:mb-0">QQ 留言板</div>
 
         <div className="flex flex-col sm:flex-row items-center gap-3">
-          {countdown.days > 0 && (
+          {(countdown.days > 0 || countdown.hours > 0 || countdown.minutes > 0 || countdown.seconds > 0) && (
             <div className="flex flex-col items-center gap-3 bg-white rounded-xl p-3 shadow-sm">
               {/* 倒计时标题 */}
               <div className={`${theme.textColor} text-sm font-medium`}>
