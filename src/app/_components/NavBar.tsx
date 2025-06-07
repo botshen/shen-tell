@@ -97,28 +97,27 @@ const NavBar: FC<NavBarProps> = ({ user, onSwitchUser }) => {
     const target = dayjs(nextBirthday.date).tz("Asia/Shanghai");
     const isSameDay = now.format('YYYY-MM-DD') === target.format('YYYY-MM-DD');
 
-    // 只有当前用户过生日时才设置为true
-    setIsBirthday(isSameDay && (
-      (user.name === "李华" && now.month() === target.month() && now.date() === target.date()) ||
-      (user.name === "漫漫🐟" && now.month() === target.month() && now.date() === target.date())
-    ));
+    // 设置是否是生日
+    setIsBirthday(isSameDay);
+
+    // 如果是生日当天，重置倒计时
+    if (isSameDay) {
+      setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      return;
+    }
 
     // 如果不是生日当天，才启动倒计时
-    if (!isSameDay) {
-      // 初始化倒计时
+    setCountdown(calculateTimeLeft(nextBirthday.date));
+
+    const timer = setInterval(() => {
       setCountdown(calculateTimeLeft(nextBirthday.date));
+    }, 1000);
 
-      // 每秒更新倒计时
-      const timer = setInterval(() => {
-        setCountdown(calculateTimeLeft(nextBirthday.date));
-      }, 1000);
-
-      return () => {
-        console.log('清理倒计时定时器');
-        clearInterval(timer);
-      };
-    }
-  }, [nextBirthday.date, user.name]);
+    return () => {
+      console.log('清理倒计时定时器');
+      clearInterval(timer);
+    };
+  }, [nextBirthday.date]);
 
   // 获取用户对应的生日主题
   const getBirthdayTheme = () => {
